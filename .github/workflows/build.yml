@@ -1,0 +1,30 @@
+name: Build Rufus Linux
+on: 
+  push:
+    branches: [ main ]
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # تحديث لـ v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5 # تحديث لـ v5
+        with:
+          python-version: '3.10'
+          
+      - name: Install Dependencies
+        run: |
+          pip install pyinstaller customtkinter packaging Pillow
+          
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile --noconsole main.py
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4 # ده هو الحل! غيرناها من v3 لـ v4
+        with:
+          name: Rufus-for-Linux-App
+          path: dist/
